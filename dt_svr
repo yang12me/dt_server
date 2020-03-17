@@ -539,6 +539,32 @@ systemctl start smartdns > /dev/null 2>&1
 
 }
 
+#安装DNSMASQ
+installDnsmasq(){
+
+apt-get install dnsmasq -q -y > /dev/null
+
+mv /etc/dnsmasq.conf /etc/dnsmasq.conf.bak
+touch /etc/dnsmasq.conf
+cat > '/etc/dnsmasq.conf' << EOF
+port=53
+domain-needed
+bogus-priv
+no-resolv
+server=1.1.1.1#53
+interface=lo
+bind-interfaces
+listen-address=127.0.0.1
+cache-size=10000
+no-negcache
+log-queries 
+log-facility=/var/log/dnsmasq.log 
+EOF
+echo "nameserver 127.0.0.1" > '/etc/resolv.conf'
+systemctl restart dnsmasq
+systemctl enable dnsmasq
+}
+
 
 #安装BBRplus内核
 installbbrplus(){
@@ -556,6 +582,62 @@ installbbrplus(){
     #remove_all
 	optimizing_system
 
+
+}
+
+#安装BBR内核
+installbbr(){
+
+cat > '/etc/sysctl.d/99-sysctl.conf' << EOF
+net.ipv6.conf.all.accept_ra = 2
+fs.file-max = 51200
+net.core.rmem_max = 67108864
+net.core.wmem_max = 67108864
+net.core.rmem_default = 65536
+net.core.wmem_default = 65536
+net.core.netdev_max_backlog = 4096
+net.core.somaxconn = 4096
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_fin_timeout = 30
+net.ipv4.tcp_keepalive_time = 1200
+net.ipv4.ip_local_port_range = 10000 65000
+net.ipv4.tcp_max_tw_buckets = 5000
+net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_rmem = 4096 87380 67108864
+net.ipv4.tcp_wmem = 4096 65536 67108864
+net.ipv4.tcp_mtu_probing = 1
+net.ipv4.tcp_slow_start_after_idle = 0
+net.ipv4.tcp_max_syn_backlog = 12800
+net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr
+EOF
+
+  sysctl -p > /dev/null
+
+cat > '/etc/systemd/system.conf' << EOF
+[Manager]
+#DefaultTimeoutStartSec=90s
+DefaultTimeoutStopSec=30s
+#DefaultRestartSec=100ms
+DefaultLimitCORE=infinity
+DefaultLimitNOFILE=51200
+DefaultLimitNPROC=51200
+EOF
+
+cat > '/etc/security/limits.conf' << EOF
+* soft nofile 51200
+* hard nofile 51200
+EOF
+
+if grep -q "ulimit" /etc/profile
+then
+  :
+else
+echo "ulimit -SHn 51200" >> /etc/profile
+fi
+
+systemctl daemon-reload
 
 }
 
@@ -682,7 +764,7 @@ Youtube频道地址：https://t.im/n21o
         install_sdns
         whiptail --title "灯塔服务端安装成功" --msgbox "
 *************************************************************************
-Trojan已安装完成，复制以下信息，在OpenWrt里进行配置
+灯塔急速版已安装完成，复制以下信息，在OpenWrt里进行配置
 服务器地址：$domain
 服务器端口：443
 服务器密码：$passwordd
@@ -691,6 +773,23 @@ Trojan已安装完成，复制以下信息，在OpenWrt里进行配置
         clear
         ;;
         2)
+        userinput
+        installDependency
+        installnginx
+        installtrojan
+        openfirewall
+        issuecert
+        nginxtrojan
+        installbbr
+        installDnsmasq
+        whiptail --title "灯塔服务端安装成功" --msgbox "
+*************************************************************************
+灯塔大众版已安装完成，复制以下信息，在OpenWrt里进行配置
+服务器地址：$domain
+服务器端口：443
+服务器密码：$passwordd
+密码修改文件：/usr/local/etc/trojan/config.json
+*************************************************************************" 16 78
         ;;
         3)
         tg_pxy
