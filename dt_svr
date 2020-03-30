@@ -735,9 +735,9 @@ function tg_pxy(){
 
 toolsMenu() {
 
-    Mainmenu=$(whiptail --clear --ok-button "确定" --backtitle "version:20200316v1" --title "灯塔服务端v2.0" --menu --nocancel "
+    Mainmenu=$(whiptail --clear --ok-button "确定" --backtitle "version:20200330v1" --title "灯塔服务端v2.1" --menu --nocancel "
 **********************************************************************************
-简介：灯塔服务端v2.0
+简介：灯塔服务端v2.1
 系统：>=debian9
 Youtube：米月
 电报群：https://t.me/mi_yue
