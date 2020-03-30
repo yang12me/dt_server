@@ -127,14 +127,14 @@ userinput(){
         domain=$(whiptail --inputbox --nocancel "请输入域名(每个域名每周只能使用5次，安装失败也算次数，可以换不同的A记录解决）" 8 78 --title "输入域名" 3>&1 1>&2 2>&3)
     done
 
-    if isresolved $domain
-    then
-    :
-    else 
-	    clear
-        whiptail --title "错误信息" --msgbox "域名解析IP不匹配VPS端IP" 8 78 
-	    exit 1
-    fi
+    # if isresolved $domain
+    # then
+    # :
+    # else 
+	#     clear
+    #     whiptail --title "错误信息" --msgbox "域名解析IP不匹配VPS端IP" 8 78 
+	#     exit 1
+    # fi
 
     while [[ -z ${passwordd} ]]; do
         passwordd=$(whiptail --inputbox --nocancel "请输入密码(这个是配置trojan的密码，牢记）" 8 78 --title "输入密码" 3>&1 1>&2 2>&3)
