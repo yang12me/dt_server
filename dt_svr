@@ -3,7 +3,7 @@
 if [[ $(id -u) != 0 ]]; then
 	clear
     whiptail --title "错误信息" --msgbox "请在root用户下执行" 8 78 
-	exit 
+	exit 1
 fi
 
 if [[ $(uname -m 2> /dev/null) != x86_64 ]]; then
