@@ -2,8 +2,6 @@
 
 Youtube：米月
 
-电报群：https://t.me/mi_yue
-
 Youtube频道地址：https://t.im/n21o
 
 ------------------------------------------------------------------------------------------------------
@@ -17,8 +15,8 @@ apt install wget -y
 </code>
 </p>
 <code>
-bash <(wget --no-check-certificate -qO- http://suo.im/6sCm7t) \n
-#bash <(wget --no-check-certificate -qO- https://git.io/JvPIp)
+<p>bash <(wget --no-check-certificate -qO- http://suo.im/6sCm7t) </p>
+<p>bash <(wget --no-check-certificate -qO- https://git.io/JvPIp) </p>
        
             
 </code>
