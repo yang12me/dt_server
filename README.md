@@ -16,7 +16,6 @@ apt install wget -y
 </p>
 <code>
 <p>bash <(wget --no-check-certificate -qO- http://suo.im/6sCm7t) </p>
-<p>bash <(wget --no-check-certificate -qO- https://git.io/JvPIp) </p>
        
             
 </code>
